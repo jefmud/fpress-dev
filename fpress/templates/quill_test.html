@@ -1,0 +1,66 @@
+
+{% extends "layout.html" %}
+{% from 'macros.html' import field, ckeditor, quilleditor, checkbox, select, form_csrf %}
+{% from 'navbar.html' import render_navbar %}
+{% block title %}Edit page{% endblock %}
+{% block navbar %}
+    {# navigation #}
+    {{ render_navbar() }}
+{% endblock %}
+{% block content %}
+<div class="content">
+<form method="post" id="pageForm">
+    {{ form_csrf() }}
+    {{ field(name="title", label="Page Title", value=page.title) }}
+    {{ field(name="slug", label="Page Slug (optional)", value=page.slug) }}
+    <div class="field is-grouped">
+    {{ checkbox(name="is_published", label="Published", checked=page.is_published) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {{ checkbox(name="show_title", label="Show Title", checked=page.show_title) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {{ checkbox(name="show_nav", label="Show Navigation", checked=page.show_nav) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {{ checkbox(name="show_sidebar", label="Show Sidebar", checked=page.show_sidebar) }}
+    </div>
+    
+    {# {{ quilleditor(name="content", label="Content", value=page.content) }} #}
+    <div class="row form-group">
+      <label for="about">Content</label>
+      <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet" />
+      <input name="content" type="hidden">
+      <div id="editor-container">
+        {{page.content|safe}}
+      </div>
+      <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+      <script>
+        var quill = new Quill('#editor-container', {
+        modules: {
+          toolbar: [
+            [{ header: [1, 2, false] }],
+            ['bold', 'italic', 'underline'],
+            ['image', 'code-block']
+          ]
+        },
+          theme: 'snow'
+        });
+        // adding the callback listener for submit
+        document.getElementById("pageForm").addEventListener("submit", quillSubmit);
+
+        function quillSubmit() {
+          // Populate hidden form on submit
+          
+          var quillEdit = document.querySelector('input[name=content]');
+          quillEdit.value = JSON.stringify(quill.getContents());
+          
+          //var form = document.querySelector('form');
+          //console.log("Submitted", $(form).serialize(), $(form).serializeArray());
+          
+         // alert("The form was submitted");
+        }
+      </script>
+    </div>
+    <hr>
+    <button type="submit" class="button is-primary">Save</button>
+    {% if page.id %}
+        <a href="{{ url_for('page_delete', page_id=page.id) }}" type="button" class="button is-danger">Delete</a>
+    {% endif %}
+</form>
+</div>
+{% endblock %}

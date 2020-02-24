@@ -1,0 +1,32 @@
+{% extends 'layout.html' %}
+{% block styles %}
+<style>
+.user-icon {
+padding-left:30px;
+background-repeat: no-repeat;
+background-position-x: 4px;
+background-position-y: 4px;
+background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAdVBMVEUAAACVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpaaVpabhQju9AAAAJnRSTlMAAQMEBQYJDhESExscHikxNz1GSWJse36DhZelpq2vvMXo6/H3+e/zNLcAAABySURBVBgZ7cFXEoJQEATAIaiIOWF6iAHn/ke0qFe4H8zegG6MhrJA8prAVbNTwVMyyuFYMyrgKBnl8NTsVPBMijvJyyyFtudru1wtDu13A2XOvzaDcKLZQWhozhDeNAHCh+YB4UZzhDB9shdSSEkPo4EfrloUE42p52cAAAAASUVORK5CYII=);
+}
+</style>
+{% endblock %}
+{% block content %}
+<h1 class="title">{{ g.brand }} Login</h1>
+<form method="post">
+    {{ form.csrf_token }}
+
+    <div class="field">
+        {{ form.username.label(class_='label') }}
+        <div class_='control'>
+            {{ form.username(class_='input user-icon') }}
+        </div>
+    </div>
+    <div class="field">
+        {{ form.password.label(class_='label') }}
+        <div class_='control'>
+            {{ form.password(class_='input') }}
+        </div>
+    </div>
+    <input class="button is-primary" id="submit" name="submit" type="submit" value="Login">
+</form>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends 'layout.html' %}
+{% from 'navbar.html' import render_navbar %}
+{% from 'macros.html' import checkbox, modal_upload %}
+{% block title %}Administer Files{% endblock %}
+{% block navbar %}
+{{ render_navbar() }}
+{% endblock %}
+{% block content %}
+
+<a href="{{ url_for('file_upload')}}" class="button is-primary">
+<span class="icon has-text is-large">
+  <i class="fas fa-plus"></i>
+</span>
+&nbsp Upload New File
+</a>
+
+<div>&nbsp
+</div>
+<table class="table is-bordered">
+<tr>
+<th>Title</th>
+<th>Owner</th>
+<th>URL</th>
+<th>Actions</th>
+</tr>
+<tbody>
+{% for file in files %}
+  <tr>
+    <td>{{ file.title }}</td>
+    <td>{{ file.owner }}</td>
+    <td><a href="{{ file.url }}" target="_blank">{{ file.url }}</a></td>
+    <td>
+      <button onclick="copyTextToClipboard('{{ file.url }}')" class="button is-small is-success">Copy</button>&nbsp;&nbsp;&nbsp;
+      <a href="{{ url_for('file_edit', file_id=file._id) }}" class="button is-small is-primary">Edit</a>&nbsp;&nbsp;&nbsp;
+      <a href="{{ url_for('file_delete', file_id=file._id) }}" class="button is-small is-danger">Delete</a>
+    </td>
+  </tr>
+{% endfor %}
+</tbody>
+</table>
+{{ modal_upload("file", "Upload-o-matic", action="/_upload") }}
+{% endblock %}
+{% block scripts %}
+ <script src="{{url_for('static', filename='js/copyTextToClipboard.js')}}"></script>
+{% endblock %}

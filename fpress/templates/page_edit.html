@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+{% from 'macros.html' import field, ckeditor, checkbox, select, form_csrf %}
+{% from 'navbar.html' import render_utility_navbar %}
+{% block title %}Edit page{% endblock %}
+{% block navbar %}
+    {# navigation #}
+    {{ render_utility_navbar() }}
+{% endblock %}
+{% block content %}
+<div class="content">
+<form method="post">
+    {{ form.csrf_token }}
+    {{ field(name="title", label="Page Title", value=page.title) }}
+    {{ field(name="slug", label="Page Slug (optional)", value=page.slug) }}
+    <div class="field is-grouped">
+    {{ checkbox(name="is_published", label="Published", checked=page.is_published) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {{ checkbox(name="show_title", label="Show Title", checked=page.show_title) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {{ checkbox(name="show_nav", label="Show Navigation", checked=page.show_nav) }}&nbsp;&nbsp;&nbsp;&nbsp;
+    {{ checkbox(name="is_sidebar", label="Is Sidebar Page", checked=page.is_sidebar) }}
+    </div>
+    
+    {{ ckeditor(name="content", label="Content", value=page.content) }}
+    {# want the sidebars to be dropdowns later on #}
+    {{ select(name="template", label="Template (optional)", selections=templates, value=page.template) }}
+    {{ field(name="sidebar_left", label="Sidebar LEFT slug (optional)", value=page.sidebar_left) }}
+    {{ field(name="sidebar_right", label="Sidebar RIGHT slug (optional)", value=page.sidebar_left) }}
+    {{ field(name="footer", label="Footer slug (optional)", value=page.footer) }}
+    <button type="submit" class="button is-primary">Save</button>
+    {% if page._id %}
+        <a href="{{ url_for('page_delete', page_id=page._id) }}" type="button" class="button is-danger">Delete</a>
+    {% endif %}
+
+</form>
+</div>
+{% endblock %}
